@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Retail IMS</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-store me-2"></i>Retail IMS
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="dashboard.html">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">
+                <i class="fas fa-boxes me-1"></i>Products
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="sales.html">
+                <i class="fas fa-shopping-cart me-1"></i>Sales
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="suppliers.html">
+                <i class="fas fa-truck me-1"></i>Suppliers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="categories.html">
+                <i class="fas fa-tags me-1"></i>Categories
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="reports.html">
+                <i class="fas fa-chart-bar me-1"></i>Reports
+              </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user me-1"></i
+                ><span id="userFullName">User</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#"
+                    ><i class="fas fa-user-cog me-2"></i>Profile</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"
+                    ><i class="fas fa-cog me-2"></i>Settings</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()"
+                    ><i class="fas fa-sign-out-alt me-2"></i>Logout</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Stats Cards -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="text-white-50 small">Total Products</div>
+                  <div class="h5 mb-0 font-weight-bold" id="totalProducts">
+                    0
+                  </div>
+                </div>
+                <div class="text-white-25">
+                  <i class="fas fa-boxes fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="text-white-50 small">Low Stock Items</div>
+                  <div class="h5 mb-0 font-weight-bold" id="lowStockCount">
+                    0
+                  </div>
+                </div>
+                <div class="text-white-25">
+                  <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card bg-success text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="text-white-50 small">Today's Sales</div>
+                  <div class="h5 mb-0 font-weight-bold">
+                    ₹<span id="todaySales">0</span>
+                  </div>
+                </div>
+                <div class="text-white-25">
+                  <i class="fas fa-rupee-sign fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card bg-info text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="text-white-50 small">Month Sales</div>
+                  <div class="h5 mb-0 font-weight-bold">
+                    ₹<span id="monthSales">0</span>
+                  </div>
+                </div>
+                <div class="text-white-25">
+                  <i class="fas fa-chart-line fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts and Tables Row -->
+      <div class="row">
+        <!-- Sales Chart -->
+        <div class="col-xl-8 col-lg-7">
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-chart-area me-1"></i>
+              Weekly Sales Overview
+            </div>
+            <div class="card-body">
+              <canvas id="salesChart" width="100%" height="40"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-xl-4 col-lg-5">
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-bolt me-1"></i>
+              Quick Actions
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2">
+                <a href="pos.html" class="btn btn-success">
+                  <i class="fas fa-cash-register me-2"></i>New Sale
+                </a>
+                <a href="products.html?action=add" class="btn btn-primary">
+                  <i class="fas fa-plus me-2"></i>Add Product
+                </a>
+                <a href="purchase.html" class="btn btn-info">
+                  <i class="fas fa-shopping-cart me-2"></i>New Purchase
+                </a>
+                <a href="reports.html" class="btn btn-secondary">
+                  <i class="fas fa-file-alt me-2"></i>Generate Report
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low Stock Alert -->
+      <div class="row">
+        <div class="col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-exclamation-triangle me-1 text-warning"></i>
+              Low Stock Alert
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Current Stock</th>
+                      <th>Min Level</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lowStockTable">
+                    <!-- Low stock items will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Selling Products -->
+        <div class="col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-trophy me-1 text-warning"></i>
+              Top Selling Products
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Qty Sold</th>
+                      <th>Trend</th>
+                    </tr>
+                  </thead>
+                  <tbody id="topProductsTable">
+                    <!-- Top products will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
