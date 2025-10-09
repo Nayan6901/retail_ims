@@ -18,84 +18,62 @@ INSERT INTO categories (category_name, description) VALUES
 ('Dairy', 'Dairy products'),
 ('Stationery', 'Office and school supplies');
 
--- Insert Suppliers
+-- Insert Suppliers for ChromaStore
 INSERT INTO suppliers (supplier_name, contact_person, phone, email, address, city, state, pincode) VALUES
-('ABC Electronics Pvt Ltd', 'Rajesh Kumar', '9876543210', 'rajesh@abc.com', '123 MG Road', 'Mumbai', 'Maharashtra', '400001'),
-('Fresh Foods Distributors', 'Priya Sharma', '9876543211', 'priya@freshfoods.com', '456 Park Street', 'Delhi', 'Delhi', '110001'),
-('Global Beverages Co', 'Amit Patel', '9876543212', 'amit@globalbev.com', '789 Ring Road', 'Ahmedabad', 'Gujarat', '380001'),
-('Care Products India', 'Sneha Reddy', 'Reddy', '9876543213', 'sneha@careproducts.com', '321 Lake View', 'Bangalore', 'Karnataka', '560001'),
-('Household Essentials', 'Vikram Singh', '9876543214', 'vikram@household.com', '654 Civil Lines', 'Pune', 'Maharashtra', '411001');
+('TechVision Electronics', 'Arjun Mehta', '9876543210', 'arjun@techvision.com', '15 Tech Park, Sector 62', 'Noida', 'Uttar Pradesh', '201301'),
+('UrbanStyle Fashion Hub', 'Kavya Singh', '9876543211', 'kavya@urbanstyle.com', '45 Fashion Street', 'Mumbai', 'Maharashtra', '400001'),
+('HealthFirst Wellness', 'Dr. Priya Sharma', '9876543212', 'priya@healthfirst.com', '78 Wellness Plaza', 'Bangalore', 'Karnataka', '560001'),
+('HomeEssentials Pro', 'Rahul Gupta', '9876543213', 'rahul@homeessentials.com', '23 Home Center Mall', 'Delhi', 'Delhi', '110001'),
+('GourmetChoice Foods', 'Neha Patel', '9876543214', 'neha@gourmetchoice.com', '56 Food Hub Complex', 'Pune', 'Maharashtra', '411001');
 
--- Insert Products
+-- Insert ChromaStore Products (25 Modern Retail Items)
 INSERT INTO products (product_code, product_name, description, category_id, supplier_id, unit, cost_price, selling_price, min_stock_level, max_stock_level) VALUES
--- Electronics
-('ELEC001', 'LED Bulb 9W', 'Energy saving LED bulb', 1, 1, 'Piece', 150.00, 199.00, 20, 200),
-('ELEC002', 'USB Cable Type-C', '1 meter USB Type-C cable', 1, 1, 'Piece', 80.00, 149.00, 30, 300),
-('ELEC003', 'Power Bank 10000mAh', 'Portable power bank', 1, 1, 'Piece', 600.00, 899.00, 10, 100),
-('ELEC004', 'Earphones Wired', 'Standard wired earphones', 1, 1, 'Piece', 150.00, 249.00, 25, 250),
+-- Electronics from TechVision Electronics (Supplier 1)
+('CHR001', 'Wireless Bluetooth Earbuds', 'Premium TWS earbuds with noise cancellation', 1, 1, 'Piece', 2500.00, 3999.00, 15, 100),
+('CHR002', 'Smart Fitness Watch', 'Health tracking smartwatch with GPS', 1, 1, 'Piece', 4500.00, 6999.00, 10, 50),
+('CHR003', 'Portable Bluetooth Speaker', 'Waterproof portable speaker', 1, 1, 'Piece', 1800.00, 2999.00, 20, 150),
+('CHR004', 'Wireless Charging Pad', 'Fast wireless charger 15W', 1, 1, 'Piece', 800.00, 1299.00, 25, 200),
+('CHR005', 'LED Smart Bulb RGB', 'WiFi controlled color changing bulb', 1, 1, 'Piece', 600.00, 999.00, 30, 300),
 
--- Groceries
-('GROC001', 'Rice Premium 1kg', 'Basmati rice', 2, 2, 'Kg', 80.00, 110.00, 50, 500),
-('GROC002', 'Wheat Flour 1kg', 'Whole wheat flour', 2, 2, 'Kg', 40.00, 55.00, 50, 500),
-('GROC003', 'Sugar 1kg', 'White sugar', 2, 2, 'Kg', 45.00, 60.00, 40, 400),
-('GROC004', 'Salt 1kg', 'Iodized salt', 2, 2, 'Kg', 20.00, 28.00, 30, 300),
-('GROC005', 'Cooking Oil 1L', 'Refined oil', 2, 2, 'Liter', 120.00, 160.00, 40, 400),
-('GROC006', 'Pulses Mix 500g', 'Dal mix', 2, 2, 'Pack', 60.00, 85.00, 30, 300),
+-- Fashion & Accessories from UrbanStyle Fashion Hub (Supplier 2)
+('CHR006', 'Designer Sunglasses', 'UV protection polarized sunglasses', 8, 2, 'Piece', 800.00, 1499.00, 20, 150),
+('CHR007', 'Premium Leather Wallet', 'Genuine leather bi-fold wallet', 8, 2, 'Piece', 1200.00, 1999.00, 15, 100),
+('CHR008', 'Casual Cotton T-Shirt', 'Comfort fit round neck t-shirt', 8, 2, 'Piece', 300.00, 599.00, 50, 500),
+('CHR009', 'Sports Cap Adjustable', 'Breathable mesh sports cap', 8, 2, 'Piece', 200.00, 399.00, 40, 400),
+('CHR010', 'Fashion Wrist Watch', 'Analog display stainless steel watch', 8, 2, 'Piece', 1500.00, 2499.00, 12, 80),
 
--- Beverages
-('BEV001', 'Soft Drink 500ml', 'Carbonated drink', 3, 3, 'Bottle', 20.00, 35.00, 100, 1000),
-('BEV002', 'Mineral Water 1L', 'Packaged drinking water', 3, 3, 'Bottle', 15.00, 20.00, 150, 1500),
-('BEV003', 'Fruit Juice 200ml', 'Mixed fruit juice', 3, 3, 'Pack', 15.00, 25.00, 80, 800),
-('BEV004', 'Energy Drink 250ml', 'Energy booster drink', 3, 3, 'Can', 50.00, 80.00, 50, 500),
-('BEV005', 'Tea Powder 250g', 'Premium tea powder', 3, 3, 'Pack', 100.00, 145.00, 30, 300),
-('BEV006', 'Coffee Powder 200g', 'Instant coffee', 3, 3, 'Pack', 180.00, 250.00, 25, 250),
+-- Health & Wellness from HealthFirst Wellness (Supplier 3)
+('CHR011', 'Vitamin C Tablets 60s', 'Immunity booster vitamin C 500mg', 4, 3, 'Bottle', 120.00, 199.00, 50, 500),
+('CHR012', 'Protein Powder 1kg', 'Whey protein isolate chocolate flavor', 4, 3, 'Container', 1800.00, 2999.00, 15, 100),
+('CHR013', 'Digital Thermometer', 'Infrared non-contact thermometer', 4, 3, 'Piece', 800.00, 1299.00, 20, 200),
+('CHR014', 'Face Mask N95 10pcs', 'Medical grade protective face masks', 4, 3, 'Pack', 150.00, 249.00, 100, 1000),
+('CHR015', 'Hand Sanitizer 500ml', 'Alcohol based hand sanitizer 70%', 4, 3, 'Bottle', 80.00, 149.00, 80, 800),
 
--- Personal Care
-('CARE001', 'Toothpaste 100g', 'Dental care', 4, 4, 'Piece', 40.00, 60.00, 50, 500),
-('CARE002', 'Soap Bar 100g', 'Bathing soap', 4, 4, 'Piece', 25.00, 40.00, 60, 600),
-('CARE003', 'Shampoo 200ml', 'Hair care shampoo', 4, 4, 'Bottle', 120.00, 180.00, 30, 300),
-('CARE004', 'Hand Sanitizer 100ml', 'Antibacterial sanitizer', 4, 4, 'Bottle', 40.00, 65.00, 40, 400),
-('CARE005', 'Face Wash 50g', 'Facial cleanser', 4, 4, 'Tube', 80.00, 130.00, 25, 250),
+-- Home Essentials from HomeEssentials Pro (Supplier 4)
+('CHR016', 'Microfiber Cleaning Cloth', 'Lint-free cleaning cloths pack of 5', 5, 4, 'Pack', 80.00, 149.00, 60, 600),
+('CHR017', 'Aroma Diffuser Electric', 'Essential oil diffuser with LED lights', 5, 4, 'Piece', 1200.00, 1999.00, 15, 100),
+('CHR018', 'Storage Container Set', 'Airtight food storage containers 4pcs', 5, 4, 'Set', 600.00, 999.00, 25, 250),
+('CHR019', 'LED Desk Lamp Adjustable', 'USB rechargeable LED reading lamp', 5, 4, 'Piece', 800.00, 1399.00, 20, 200),
+('CHR020', 'Memory Foam Pillow', 'Ergonomic cervical support pillow', 5, 4, 'Piece', 1000.00, 1699.00, 15, 150),
 
--- Household
-('HOUSE001', 'Detergent 1kg', 'Washing powder', 5, 5, 'Pack', 100.00, 145.00, 40, 400),
-('HOUSE002', 'Dish Wash Bar', 'Utensil cleaner', 5, 5, 'Piece', 15.00, 25.00, 60, 600),
-('HOUSE003', 'Floor Cleaner 500ml', 'Floor cleaning liquid', 5, 5, 'Bottle', 60.00, 95.00, 30, 300),
-('HOUSE004', 'Garbage Bags 30pcs', 'Medium size bags', 5, 5, 'Pack', 40.00, 70.00, 50, 500),
-('HOUSE005', 'Toilet Cleaner 500ml', 'Bathroom cleaner', 5, 5, 'Bottle', 70.00, 110.00, 30, 300),
-
--- Snacks
-('SNACK001', 'Chips 100g', 'Potato chips', 6, 2, 'Pack', 20.00, 35.00, 100, 1000),
-('SNACK002', 'Biscuits 200g', 'Cream biscuits', 6, 2, 'Pack', 30.00, 50.00, 80, 800),
-('SNACK003', 'Namkeen 150g', 'Indian savory snack', 6, 2, 'Pack', 25.00, 45.00, 70, 700),
-('SNACK004', 'Chocolates 50g', 'Milk chocolate', 6, 2, 'Piece', 40.00, 60.00, 50, 500),
-('SNACK005', 'Cookies 100g', 'Butter cookies', 6, 2, 'Pack', 35.00, 55.00, 60, 600),
-
--- Dairy
-('DAIRY001', 'Milk 1L', 'Full cream milk', 7, 2, 'Liter', 50.00, 65.00, 30, 300),
-('DAIRY002', 'Curd 500g', 'Fresh curd', 7, 2, 'Cup', 30.00, 45.00, 25, 250),
-('DAIRY003', 'Butter 100g', 'Table butter', 7, 2, 'Pack', 45.00, 65.00, 20, 200),
-('DAIRY004', 'Cheese Slice 200g', 'Processed cheese', 7, 2, 'Pack', 100.00, 145.00, 15, 150),
-('DAIRY005', 'Paneer 200g', 'Fresh cottage cheese', 7, 2, 'Pack', 70.00, 100.00, 20, 200),
-
--- Stationery
-('STAT001', 'Notebook A4', 'Single line notebook', 8, 1, 'Piece', 30.00, 50.00, 40, 400),
-('STAT002', 'Pen Blue', 'Ball point pen', 8, 1, 'Piece', 5.00, 10.00, 100, 1000),
-('STAT003', 'Pencil HB', 'Lead pencil', 8, 1, 'Piece', 3.00, 5.00, 100, 1000),
-('STAT004', 'Eraser', 'Rubber eraser', 8, 1, 'Piece', 3.00, 5.00, 80, 800),
-('STAT005', 'Sharpener', 'Pencil sharpener', 8, 1, 'Piece', 5.00, 8.00, 80, 800);
+-- Gourmet Foods from GourmetChoice Foods (Supplier 5)
+('CHR021', 'Organic Green Tea 100g', 'Premium organic green tea leaves', 3, 5, 'Pack', 180.00, 299.00, 40, 400),
+('CHR022', 'Dark Chocolate Bar 70%', 'Belgian dark chocolate premium quality', 6, 5, 'Bar', 120.00, 199.00, 60, 600),
+('CHR023', 'Artisan Coffee Beans 250g', 'Single origin roasted coffee beans', 3, 5, 'Pack', 400.00, 649.00, 30, 300),
+('CHR024', 'Himalayan Pink Salt 500g', 'Natural rock salt crystals', 2, 5, 'Pack', 80.00, 149.00, 50, 500),
+('CHR025', 'Organic Honey 500g', 'Pure raw unprocessed honey', 2, 5, 'Jar', 300.00, 499.00, 35, 350);
 
 -- Initialize stock for all products
 INSERT INTO stock (product_id, quantity)
 SELECT product_id, 50 FROM products;
 
--- Add some sample purchases
+-- Add ChromaStore sample purchases
 INSERT INTO purchases (purchase_number, supplier_id, purchase_date, payment_status, created_by, notes) VALUES
-('PUR-000001', 1, '2025-10-01', 'paid', 1, 'Initial stock purchase - Electronics'),
-('PUR-000002', 2, '2025-10-01', 'paid', 1, 'Initial stock purchase - Groceries & Food'),
-('PUR-000003', 3, '2025-10-02', 'paid', 1, 'Initial stock purchase - Beverages'),
-('PUR-000004', 4, '2025-10-03', 'pending', 1, 'Stock replenishment - Personal Care'),
-('PUR-000005', 5, '2025-10-05', 'paid', 1, 'Monthly purchase - Household items');
+('PUR-000001', 1, '2025-10-01', 'paid', 1, 'Initial stock purchase - TechVision Electronics'),
+('PUR-000002', 2, '2025-10-01', 'paid', 1, 'Initial stock purchase - UrbanStyle Fashion Hub'),
+('PUR-000003', 3, '2025-10-02', 'paid', 1, 'Initial stock purchase - HealthFirst Wellness'),
+('PUR-000004', 4, '2025-10-03', 'pending', 1, 'Stock replenishment - HomeEssentials Pro'),
+('PUR-000005', 5, '2025-10-05', 'paid', 1, 'Monthly purchase - GourmetChoice Foods');
 
 -- Add purchase items
 INSERT INTO purchase_items (purchase_id, product_id, quantity, unit_price, total_price) VALUES

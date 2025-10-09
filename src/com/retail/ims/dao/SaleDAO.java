@@ -222,6 +222,36 @@ public class SaleDAO {
     }
     
     /**
+     * Get sales by date range
+     * @param startDate Start date (YYYY-MM-DD)
+     * @param endDate End date (YYYY-MM-DD)
+     * @return List of sales within date range
+     */
+    public List<Sale> getSalesByDateRange(String startDate, String endDate) {
+        List<Sale> sales = new ArrayList<>();
+        String sql = "SELECT * FROM v_sales_summary " +
+                     "WHERE DATE(sale_date) BETWEEN ? AND ? " +
+                     "ORDER BY sale_date DESC";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, startDate);
+            pstmt.setString(2, endDate);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                sales.add(extractSaleFromView(rs));
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getting sales by date range: " + e.getMessage());
+        }
+        
+        return sales;
+    }
+    
+    /**
      * Generate new sale number
      * @param conn Database connection
      * @return Sale number
@@ -281,6 +311,8 @@ public class SaleDAO {
         sale.setPaymentMethod(rs.getString("payment_method"));
         sale.setPaymentStatus(rs.getString("payment_status"));
         sale.setCreatedByName(rs.getString("created_by_name"));
+        sale.setTotalItems(rs.getInt("total_items"));
+        sale.setTotalQuantity(rs.getInt("total_quantity"));
         return sale;
     }
     

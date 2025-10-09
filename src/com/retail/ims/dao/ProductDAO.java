@@ -146,6 +146,32 @@ public class ProductDAO {
     }
     
     /**
+     * Get products by supplier ID
+     * @param supplierId Supplier ID
+     * @return List of products for the supplier
+     */
+    public List<Product> getProductsBySupplierId(int supplierId) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM v_product_stock WHERE supplier_id = ? ORDER BY product_name";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, supplierId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                products.add(extractProductFromView(rs));
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getting products by supplier: " + e.getMessage());
+        }
+        
+        return products;
+    }
+    
+    /**
      * Create new product
      * @param product Product object
      * @return true if successful
@@ -182,10 +208,11 @@ public class ProductDAO {
                 if (rs.next()) {
                     int productId = rs.getInt(1);
                     
-                    // Initialize stock
-                    String stockSql = "INSERT INTO stock (product_id, quantity) VALUES (?, 0)";
+                    // Initialize stock with the provided current stock quantity
+                    String stockSql = "INSERT INTO stock (product_id, quantity) VALUES (?, ?)";
                     PreparedStatement stockPstmt = conn.prepareStatement(stockSql);
                     stockPstmt.setInt(1, productId);
+                    stockPstmt.setInt(2, product.getCurrentStock()); // Use the actual current stock value
                     stockPstmt.executeUpdate();
                 }
                 
@@ -230,9 +257,13 @@ public class ProductDAO {
                      "min_stock_level = ?, max_stock_level = ?, is_active = ? " +
                      "WHERE product_id = ?";
         
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getConnection();
+            conn.setAutoCommit(false);
             
+            // Update product information
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, product.getProductName());
             pstmt.setString(2, product.getDescription());
             pstmt.setInt(3, product.getCategoryId());
@@ -245,11 +276,42 @@ public class ProductDAO {
             pstmt.setBoolean(10, product.isActive());
             pstmt.setInt(11, product.getProductId());
             
-            return pstmt.executeUpdate() > 0;
+            int productResult = pstmt.executeUpdate();
+            
+            if (productResult > 0) {
+                // Update stock quantity
+                String stockSql = "UPDATE stock SET quantity = ?, last_updated = CURRENT_TIMESTAMP WHERE product_id = ?";
+                PreparedStatement stockPstmt = conn.prepareStatement(stockSql);
+                stockPstmt.setInt(1, product.getCurrentStock());
+                stockPstmt.setInt(2, product.getProductId());
+                stockPstmt.executeUpdate();
+                
+                conn.commit();
+                return true;
+            }
+            
+            conn.rollback();
+            return false;
             
         } catch (SQLException e) {
             System.err.println("Error updating product: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     
@@ -269,6 +331,28 @@ public class ProductDAO {
             
         } catch (SQLException e) {
             System.err.println("Error deleting product: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Update stock quantity for a product
+     * @param productId Product ID
+     * @param quantity New stock quantity
+     * @return true if successful
+     */
+    public boolean updateStock(int productId, int quantity) {
+        String sql = "UPDATE stock SET quantity = ?, last_updated = CURRENT_TIMESTAMP WHERE product_id = ?";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, quantity);
+            pstmt.setInt(2, productId);
+            return pstmt.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Error updating stock: " + e.getMessage());
             return false;
         }
     }

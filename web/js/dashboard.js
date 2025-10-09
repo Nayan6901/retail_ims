@@ -61,27 +61,8 @@ async function loadLowStockProducts() {
   try {
     showLoading("lowStockTable");
 
-    // Simulate API call (replace with actual API when available)
-    const lowStockProducts = [
-      {
-        productName: "LED Bulb 9W",
-        currentStock: 5,
-        minLevel: 20,
-        productId: 1,
-      },
-      {
-        productName: "Rice Premium 1kg",
-        currentStock: 15,
-        minLevel: 50,
-        productId: 5,
-      },
-      {
-        productName: "Soft Drink 500ml",
-        currentStock: 25,
-        minLevel: 100,
-        productId: 11,
-      },
-    ];
+    // Fetch low stock products from API
+    const lowStockProducts = await apiRequest("/api/products/low-stock");
 
     tableBody.innerHTML = "";
 
@@ -92,14 +73,31 @@ async function loadLowStockProducts() {
     }
 
     lowStockProducts.forEach((product) => {
+      const stockLevel = product.currentStock;
+      const minLevel = product.minStockLevel;
+
+      // Determine badge color based on stock level
+      let badgeClass = "bg-warning";
+      if (stockLevel === 0) {
+        badgeClass = "bg-danger";
+      } else if (stockLevel <= minLevel / 2) {
+        badgeClass = "bg-danger";
+      }
+
       const row = `
                 <tr>
-                    <td>${product.productName}</td>
-                    <td><span class="badge bg-warning">${product.currentStock}</span></td>
-                    <td>${product.minLevel}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary" onclick="reorderProduct(${product.productId})">
+                        <div class="fw-bold">${product.productName}</div>
+                        <small class="text-muted">${product.productCode}</small>
+                    </td>
+                    <td><span class="badge ${badgeClass}">${stockLevel}</span></td>
+                    <td>${minLevel}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="reorderProduct(${product.productId})" title="Reorder">
                             <i class="fas fa-shopping-cart"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-info ms-1" onclick="viewProduct(${product.productId})" title="View Details">
+                            <i class="fas fa-eye"></i>
                         </button>
                     </td>
                 </tr>
@@ -109,7 +107,7 @@ async function loadLowStockProducts() {
   } catch (error) {
     console.error("Error loading low stock products:", error);
     tableBody.innerHTML =
-      '<tr><td colspan="4" class="text-center text-danger">Error loading data</td></tr>';
+      '<tr><td colspan="4" class="text-center text-danger">Error loading low stock data</td></tr>';
   }
 }
 
@@ -249,6 +247,11 @@ function reorderProduct(productId) {
     `Reorder functionality for product ${productId} would be implemented here`
   );
   // Implement reorder functionality
+}
+
+function viewProduct(productId) {
+  // Redirect to products page with specific product highlighted
+  window.location.href = `products.html?highlight=${productId}`;
 }
 
 // Refresh dashboard data

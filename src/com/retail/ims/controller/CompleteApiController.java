@@ -75,6 +75,10 @@ public class CompleteApiController implements HttpHandler {
             else if (path.startsWith("/api/sales")) {
                 handleSaleEndpoints(exchange, method, path);
             }
+            // Report endpoints
+            else if (path.startsWith("/api/reports")) {
+                handleReportEndpoints(exchange, method, path);
+            }
             // Authentication endpoints
             else if (path.startsWith("/api/auth")) {
                 handleAuthEndpoints(exchange, method, path);
@@ -245,17 +249,35 @@ public class CompleteApiController implements HttpHandler {
                     List<Supplier> suppliers = supplierDAO.getAllSuppliers();
                     sendJsonResponse(exchange, 200, convertSuppliersToJson(suppliers));
                 } else if (path.startsWith("/api/suppliers/")) {
-                    String idStr = path.substring("/api/suppliers/".length());
-                    try {
-                        int supplierId = Integer.parseInt(idStr);
-                        Supplier supplier = supplierDAO.getSupplierById(supplierId);
-                        if (supplier != null) {
-                            sendJsonResponse(exchange, 200, convertSupplierToJson(supplier));
+                    String pathSegment = path.substring("/api/suppliers/".length());
+                    
+                    // Check for /api/suppliers/{id}/products
+                    if (pathSegment.contains("/products")) {
+                        String[] parts = pathSegment.split("/");
+                        if (parts.length >= 2 && "products".equals(parts[1])) {
+                            try {
+                                int supplierId = Integer.parseInt(parts[0]);
+                                List<Product> products = productDAO.getProductsBySupplierId(supplierId);
+                                sendJsonResponse(exchange, 200, convertProductsToJson(products));
+                            } catch (NumberFormatException e) {
+                                sendJsonResponse(exchange, 400, "{\"error\": \"Invalid supplier ID\"}");
+                            }
                         } else {
-                            sendJsonResponse(exchange, 404, "{\"error\": \"Supplier not found\"}");
+                            sendJsonResponse(exchange, 404, "{\"error\": \"Not found\"}");
                         }
-                    } catch (NumberFormatException e) {
-                        sendJsonResponse(exchange, 400, "{\"error\": \"Invalid supplier ID\"}");
+                    } else {
+                        // Single supplier by ID
+                        try {
+                            int supplierId = Integer.parseInt(pathSegment);
+                            Supplier supplier = supplierDAO.getSupplierById(supplierId);
+                            if (supplier != null) {
+                                sendJsonResponse(exchange, 200, convertSupplierToJson(supplier));
+                            } else {
+                                sendJsonResponse(exchange, 404, "{\"error\": \"Supplier not found\"}");
+                            }
+                        } catch (NumberFormatException e) {
+                            sendJsonResponse(exchange, 400, "{\"error\": \"Invalid supplier ID\"}");
+                        }
                     }
                 }
                 break;
@@ -336,6 +358,147 @@ public class CompleteApiController implements HttpHandler {
         } else {
             sendJsonResponse(exchange, 404, "{\"error\": \"Auth endpoint not found\"}");
         }
+    }
+    
+    private void handleReportEndpoints(HttpExchange exchange, String method, String path) throws IOException {
+        if (!"GET".equalsIgnoreCase(method)) {
+            sendJsonResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
+            return;
+        }
+        
+        // Parse query parameters for date filters
+        String query = exchange.getRequestURI().getQuery();
+        Map<String, String> params = parseQueryParams(query);
+        String startDate = params.get("startDate");
+        String endDate = params.get("endDate");
+        
+        try {
+            switch (path) {
+                case "/api/reports/quick-stats":
+                    handleQuickStats(exchange);
+                    break;
+                case "/api/reports/sales":
+                    handleSalesReport(exchange, startDate, endDate);
+                    break;
+                case "/api/reports/inventory":
+                    handleInventoryReport(exchange);
+                    break;
+                case "/api/reports/low-stock":
+                    handleLowStockReport(exchange);
+                    break;
+                case "/api/reports/products":
+                    handleProductsReport(exchange, startDate, endDate);
+                    break;
+                case "/api/reports/categories":
+                    handleCategoriesReport(exchange, startDate, endDate);
+                    break;
+                case "/api/reports/suppliers":
+                    handleSuppliersReport(exchange);
+                    break;
+                case "/api/reports/profit":
+                    handleProfitReport(exchange, startDate, endDate);
+                    break;
+                default:
+                    sendJsonResponse(exchange, 404, "{\"error\": \"Report endpoint not found\"}");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendJsonResponse(exchange, 500, "{\"error\": \"Error generating report: " + e.getMessage() + "\"}");
+        }
+    }
+    
+    private void handleQuickStats(HttpExchange exchange) throws IOException {
+        try {
+            Map<String, Object> stats = new HashMap<>();
+            stats.put("todaySales", saleDAO.getTodaySales());
+            stats.put("monthSales", saleDAO.getMonthSales());
+            stats.put("lowStockCount", productDAO.getLowStockProducts().size());
+            stats.put("totalProducts", productDAO.getAllProducts().size());
+            
+            sendJsonResponse(exchange, 200, convertMapToJson(stats));
+        } catch (Exception e) {
+            sendJsonResponse(exchange, 500, "{\"error\": \"Error loading stats\"}");
+        }
+    }
+    
+    private void handleSalesReport(HttpExchange exchange, String startDate, String endDate) throws IOException {
+        List<Sale> sales;
+        if (startDate != null && endDate != null) {
+            sales = saleDAO.getSalesByDateRange(startDate, endDate);
+        } else {
+            sales = saleDAO.getAllSales();
+        }
+        sendJsonResponse(exchange, 200, convertSalesToJson(sales));
+    }
+    
+    private void handleInventoryReport(HttpExchange exchange) throws IOException {
+        List<Product> products = productDAO.getAllProducts();
+        sendJsonResponse(exchange, 200, convertProductsToJson(products));
+    }
+    
+    private void handleLowStockReport(HttpExchange exchange) throws IOException {
+        List<Product> lowStockProducts = productDAO.getLowStockProducts();
+        sendJsonResponse(exchange, 200, convertProductsToJson(lowStockProducts));
+    }
+    
+    private void handleProductsReport(HttpExchange exchange, String startDate, String endDate) throws IOException {
+        // This would require a new DAO method to get product performance data
+        // For now, return product list
+        List<Product> products = productDAO.getAllProducts();
+        sendJsonResponse(exchange, 200, convertProductsToJson(products));
+    }
+    
+    private void handleCategoriesReport(HttpExchange exchange, String startDate, String endDate) throws IOException {
+        List<Category> categories = categoryDAO.getAllCategories();
+        sendJsonResponse(exchange, 200, convertCategoriesToJson(categories));
+    }
+    
+    private void handleSuppliersReport(HttpExchange exchange) throws IOException {
+        List<Supplier> suppliers = supplierDAO.getAllSuppliers();
+        sendJsonResponse(exchange, 200, convertSuppliersToJson(suppliers));
+    }
+    
+    private void handleProfitReport(HttpExchange exchange, String startDate, String endDate) throws IOException {
+        // This would require a new DAO method to calculate profit data
+        // For now, return product list with pricing info
+        List<Product> products = productDAO.getAllProducts();
+        sendJsonResponse(exchange, 200, convertProductsToJson(products));
+    }
+    
+    private Map<String, String> parseQueryParams(String query) {
+        Map<String, String> params = new HashMap<>();
+        if (query != null) {
+            String[] pairs = query.split("&");
+            for (String pair : pairs) {
+                String[] keyValue = pair.split("=");
+                if (keyValue.length == 2) {
+                    try {
+                        params.put(keyValue[0], java.net.URLDecoder.decode(keyValue[1], "UTF-8"));
+                    } catch (Exception e) {
+                        // Ignore malformed parameters
+                    }
+                }
+            }
+        }
+        return params;
+    }
+    
+    private String convertMapToJson(Map<String, Object> map) {
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        boolean first = true;
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (!first) json.append(",");
+            json.append("\"").append(entry.getKey()).append("\":");
+            if (entry.getValue() instanceof String) {
+                json.append("\"").append(escapeJson((String) entry.getValue())).append("\"");
+            } else {
+                json.append(entry.getValue());
+            }
+            first = false;
+        }
+        json.append("}");
+        return json.toString();
     }
     
     private void handleLogin(HttpExchange exchange) throws IOException {
@@ -680,10 +843,11 @@ public class CompleteApiController implements HttpHandler {
     
     private String convertCategoryToJson(Category category) {
         return String.format(
-            "{\"categoryId\":%d,\"categoryName\":\"%s\",\"description\":\"%s\",\"createdAt\":\"%s\"}",
+            "{\"categoryId\":%d,\"categoryName\":\"%s\",\"description\":\"%s\",\"productCount\":%d,\"createdAt\":\"%s\"}",
             category.getCategoryId(),
             escapeJson(category.getCategoryName()),
             escapeJson(category.getDescription()),
+            category.getProductCount(),
             category.getCreatedAt() != null ? category.getCreatedAt().toString() : ""
         );
     }
@@ -704,14 +868,16 @@ public class CompleteApiController implements HttpHandler {
     private String convertSupplierToJson(Supplier supplier) {
         return String.format(
             "{\"supplierId\":%d,\"supplierName\":\"%s\",\"contactPerson\":\"%s\"," +
-            "\"phone\":\"%s\",\"email\":\"%s\",\"address\":\"%s\",\"isActive\":%s}",
+            "\"phone\":\"%s\",\"email\":\"%s\",\"address\":\"%s\",\"isActive\":%s," +
+            "\"productCount\":%d}",
             supplier.getSupplierId(),
             escapeJson(supplier.getSupplierName()),
             escapeJson(supplier.getContactPerson()),
             escapeJson(supplier.getPhone()),
             escapeJson(supplier.getEmail()),
             escapeJson(supplier.getAddress()),
-            supplier.isActive()
+            supplier.isActive(),
+            supplier.getProductCount()
         );
     }
     
@@ -724,13 +890,16 @@ public class CompleteApiController implements HttpHandler {
             Sale sale = sales.get(i);
             json.append(String.format(
                 "{\"saleId\":%d,\"saleNumber\":\"%s\",\"customerName\":\"%s\"," +
-                "\"totalAmount\":%.2f,\"paymentMethod\":\"%s\",\"saleDate\":\"%s\"}",
+                "\"totalAmount\":%.2f,\"paymentMethod\":\"%s\",\"saleDate\":\"%s\"," +
+                "\"itemCount\":%d,\"totalQuantity\":%d}",
                 sale.getSaleId(),
                 escapeJson(sale.getSaleNumber()),
                 escapeJson(sale.getCustomerName()),
                 sale.getTotalAmount(),
                 escapeJson(sale.getPaymentMethod()),
-                sale.getSaleDate() != null ? sale.getSaleDate().toString() : ""
+                sale.getSaleDate() != null ? sale.getSaleDate().toString() : "",
+                sale.getTotalItems(),
+                sale.getTotalQuantity()
             ));
         }
         
@@ -741,13 +910,16 @@ public class CompleteApiController implements HttpHandler {
     private String convertSaleToJson(Sale sale) {
         return String.format(
             "{\"saleId\":%d,\"saleNumber\":\"%s\",\"customerName\":\"%s\"," +
-            "\"totalAmount\":%.2f,\"paymentMethod\":\"%s\",\"saleDate\":\"%s\"}",
+            "\"totalAmount\":%.2f,\"paymentMethod\":\"%s\",\"saleDate\":\"%s\"," +
+            "\"itemCount\":%d,\"totalQuantity\":%d}",
             sale.getSaleId(),
             escapeJson(sale.getSaleNumber()),
             escapeJson(sale.getCustomerName()),
             sale.getTotalAmount(),
             escapeJson(sale.getPaymentMethod()),
-            sale.getSaleDate() != null ? sale.getSaleDate().toString() : ""
+            sale.getSaleDate() != null ? sale.getSaleDate().toString() : "",
+            sale.getTotalItems(),
+            sale.getTotalQuantity()
         );
     }
     

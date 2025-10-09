@@ -22,6 +22,8 @@ public class Sale {
     private String notes;
     private int createdBy;
     private String createdByName; // For display
+    private int totalItems; // Number of different items in the sale
+    private int totalQuantity; // Total quantity of all items
     private List<SaleItem> saleItems;
     
     // Constructors
@@ -159,6 +161,22 @@ public class Sale {
     
     public void setCreatedByName(String createdByName) {
         this.createdByName = createdByName;
+    }
+    
+    public int getTotalItems() {
+        return totalItems;
+    }
+    
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+    
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+    
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
     
     public List<SaleItem> getSaleItems() {

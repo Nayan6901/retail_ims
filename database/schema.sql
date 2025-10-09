@@ -200,6 +200,7 @@ SELECT
     p.product_id,
     p.product_code,
     p.product_name,
+    p.supplier_id,
     c.category_name,
     s.supplier_name,
     p.cost_price,
@@ -212,7 +213,9 @@ SELECT
         WHEN COALESCE(st.quantity, 0) >= p.max_stock_level THEN 'High'
         ELSE 'Normal'
     END AS stock_status,
-    p.is_active
+    p.is_active,
+    p.unit,
+    p.selling_price AS price
 FROM products p
 LEFT JOIN categories c ON p.category_id = c.category_id
 LEFT JOIN suppliers s ON p.supplier_id = s.supplier_id

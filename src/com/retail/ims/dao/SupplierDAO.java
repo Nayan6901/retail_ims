@@ -18,14 +18,18 @@ public class SupplierDAO {
      */
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = new ArrayList<>();
-        String sql = "SELECT * FROM suppliers ORDER BY supplier_name";
+        String sql = "SELECT s.*, COUNT(p.product_id) as product_count " +
+                     "FROM suppliers s " +
+                     "LEFT JOIN products p ON s.supplier_id = p.supplier_id " +
+                     "GROUP BY s.supplier_id " +
+                     "ORDER BY s.supplier_name";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             
             while (rs.next()) {
-                suppliers.add(extractSupplierFromResultSet(rs));
+                suppliers.add(extractSupplierFromResultSetWithCount(rs));
             }
             
         } catch (SQLException e) {
@@ -187,6 +191,30 @@ public class SupplierDAO {
         supplier.setActive(rs.getBoolean("is_active"));
         supplier.setCreatedAt(rs.getTimestamp("created_at"));
         supplier.setUpdatedAt(rs.getTimestamp("updated_at"));
+        return supplier;
+    }
+    
+    /**
+     * Extract Supplier from ResultSet with product count
+     * @param rs ResultSet
+     * @return Supplier object
+     * @throws SQLException if database error occurs
+     */
+    private Supplier extractSupplierFromResultSetWithCount(ResultSet rs) throws SQLException {
+        Supplier supplier = new Supplier();
+        supplier.setSupplierId(rs.getInt("supplier_id"));
+        supplier.setSupplierName(rs.getString("supplier_name"));
+        supplier.setContactPerson(rs.getString("contact_person"));
+        supplier.setPhone(rs.getString("phone"));
+        supplier.setEmail(rs.getString("email"));
+        supplier.setAddress(rs.getString("address"));
+        supplier.setCity(rs.getString("city"));
+        supplier.setState(rs.getString("state"));
+        supplier.setPincode(rs.getString("pincode"));
+        supplier.setActive(rs.getBoolean("is_active"));
+        supplier.setCreatedAt(rs.getTimestamp("created_at"));
+        supplier.setUpdatedAt(rs.getTimestamp("updated_at"));
+        supplier.setProductCount(rs.getInt("product_count"));
         return supplier;
     }
 }

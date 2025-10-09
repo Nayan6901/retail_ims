@@ -18,14 +18,18 @@ public class CategoryDAO {
      */
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM categories ORDER BY category_name";
+        String sql = "SELECT c.*, COUNT(p.product_id) as product_count " +
+                     "FROM categories c " +
+                     "LEFT JOIN products p ON c.category_id = p.category_id AND p.is_active = TRUE " +
+                     "GROUP BY c.category_id, c.category_name, c.description, c.created_at, c.updated_at " +
+                     "ORDER BY c.category_name";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             
             while (rs.next()) {
-                categories.add(extractCategoryFromResultSet(rs));
+                categories.add(extractCategoryWithCountFromResultSet(rs));
             }
             
         } catch (SQLException e) {
@@ -123,6 +127,23 @@ public class CategoryDAO {
             System.err.println("Error deleting category: " + e.getMessage());
             return false;
         }
+    }
+    
+    /**
+     * Extract Category with product count from ResultSet
+     * @param rs ResultSet
+     * @return Category object with product count
+     * @throws SQLException if database error occurs
+     */
+    private Category extractCategoryWithCountFromResultSet(ResultSet rs) throws SQLException {
+        Category category = new Category();
+        category.setCategoryId(rs.getInt("category_id"));
+        category.setCategoryName(rs.getString("category_name"));
+        category.setDescription(rs.getString("description"));
+        category.setProductCount(rs.getInt("product_count"));
+        category.setCreatedAt(rs.getTimestamp("created_at"));
+        category.setUpdatedAt(rs.getTimestamp("updated_at"));
+        return category;
     }
     
     /**

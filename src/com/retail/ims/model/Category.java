@@ -9,6 +9,7 @@ public class Category {
     private int categoryId;
     private String categoryName;
     private String description;
+    private int productCount; // Number of products in this category
     private Timestamp createdAt;
     private Timestamp updatedAt;
     
@@ -45,6 +46,14 @@ public class Category {
         this.description = description;
     }
     
+    public int getProductCount() {
+        return productCount;
+    }
+    
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
+    }
+    
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -67,6 +76,7 @@ public class Category {
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
                 ", description='" + description + '\'' +
+                ", productCount=" + productCount +
                 '}';
     }
 }

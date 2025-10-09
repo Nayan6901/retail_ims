@@ -1,325 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sales - Retail IMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.html">
-                <i class="fas fa-store me-2"></i>Retail IMS
-            </a>
-            
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard.html">
-                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="products.html">
-                            <i class="fas fa-boxes me-1"></i>Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categories.html">
-                            <i class="fas fa-tags me-1"></i>Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="suppliers.html">
-                            <i class="fas fa-truck me-1"></i>Suppliers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="sales.html">
-                            <i class="fas fa-shopping-cart me-1"></i>Sales
-                        </a>
-                    </li>
-                </ul>
-                
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-1"></i><span id="userFullName">User</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="dashboard.html">
+          <i class="fas fa-store me-2"></i>Retail IMS
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="dashboard.html">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">
+                <i class="fas fa-boxes me-1"></i>Products
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="categories.html">
+                <i class="fas fa-tags me-1"></i>Categories
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="suppliers.html">
+                <i class="fas fa-truck me-1"></i>Suppliers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="sales.html">
+                <i class="fas fa-shopping-cart me-1"></i>Sales
+              </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user me-1"></i
+                ><span id="userFullName">User</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()"
+                    ><i class="fas fa-sign-out-alt me-2"></i>Logout</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
     <!-- Main Content -->
     <div class="container-fluid mt-4">
-        <!-- Quick Sale Panel -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="fas fa-cash-register me-2"></i>Quick Sale
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="productSelect" class="form-label">Select Product</label>
-                                    <select class="form-select" id="productSelect">
-                                        <option value="">Choose a product...</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="quantity" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" id="quantity" min="1" value="1">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label class="form-label">&nbsp;</label>
-                                    <button class="btn btn-primary w-100" onclick="addToCart()">
-                                        <i class="fas fa-plus me-2"></i>Add to Cart
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <!-- Quick Sale Panel -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-cash-register me-2"></i>Quick Sale
+              </h5>
             </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="productSelect" class="form-label"
+                      >Select Product</label
+                    >
+                    <select class="form-select" id="productSelect">
+                      <option value="">Choose a product...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="quantity"
+                      min="1"
+                      value="1"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button class="btn btn-primary w-100" onclick="addToCart()">
+                      <i class="fas fa-plus me-2"></i>Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Shopping Cart -->
+        <div class="col-md-8">
+          <div class="card">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <h5 class="mb-0">
+                <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+              </h5>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                onclick="clearCart()"
+              >
+                <i class="fas fa-trash me-2"></i>Clear Cart
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Total</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cartItems">
+                    <tr>
+                      <td colspan="5" class="text-center text-muted">
+                        <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+                        <br />Cart is empty
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="row">
-            <!-- Shopping Cart -->
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
-                        </h5>
-                        <button class="btn btn-outline-danger btn-sm" onclick="clearCart()">
-                            <i class="fas fa-trash me-2"></i>Clear Cart
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cartItems">
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted">
-                                            <i class="fas fa-shopping-cart fa-2x mb-2"></i>
-                                            <br>Cart is empty
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <!-- Sale Summary -->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>Sale Summary
+              </h5>
             </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <span id="subtotal">₹0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tax (18%):</span>
+                <span id="tax">₹0.00</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+                <strong id="total">₹0.00</strong>
+              </div>
 
-            <!-- Sale Summary -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="fas fa-calculator me-2"></i>Sale Summary
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal:</span>
-                            <span id="subtotal">₹0.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Tax (18%):</span>
-                            <span id="tax">₹0.00</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <strong>Total:</strong>
-                            <strong id="total">₹0.00</strong>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="customerName" class="form-label">Customer Name</label>
-                            <input type="text" class="form-control" id="customerName" placeholder="Enter customer name">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="paymentMethod" class="form-label">Payment Method</label>
-                            <select class="form-select" id="paymentMethod">
-                                <option value="cash">Cash</option>
-                                <option value="card">Card</option>
-                                <option value="upi">UPI</option>
-                            </select>
-                        </div>
-                        
-                        <button class="btn btn-success w-100" onclick="completeSale()" id="completeSaleBtn" disabled>
-                            <i class="fas fa-check me-2"></i>Complete Sale
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+              <div class="mb-3">
+                <label for="customerName" class="form-label"
+                  >Customer Name</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="customerName"
+                  placeholder="Enter customer name"
+                />
+              </div>
 
-        <!-- Sales History -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="fas fa-history me-2"></i>Recent Sales
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Sale ID</th>
-                                        <th>Date</th>
-                                        <th>Customer</th>
-                                        <th>Items</th>
-                                        <th>Total</th>
-                                        <th>Payment</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="salesHistory">
-                                    <tr>
-                                        <td colspan="7" class="text-center">
-                                            <i class="fas fa-spinner fa-spin"></i> Loading sales...
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+              <div class="mb-3">
+                <label for="paymentMethod" class="form-label"
+                  >Payment Method</label
+                >
+                <select class="form-select" id="paymentMethod">
+                  <option value="cash">Cash</option>
+                  <option value="card">Card</option>
+                  <option value="upi">UPI</option>
+                </select>
+              </div>
+
+              <button
+                class="btn btn-success w-100"
+                onclick="completeSale()"
+                id="completeSaleBtn"
+                disabled
+              >
+                <i class="fas fa-check me-2"></i>Complete Sale
+              </button>
             </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Sales History -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-history me-2"></i>Recent Sales
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Sale ID</th>
+                      <th>Date</th>
+                      <th>Customer</th>
+                      <th>Items</th>
+                      <th>Total</th>
+                      <th>Payment</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="salesHistory">
+                    <tr>
+                      <td colspan="7" class="text-center">
+                        <i class="fas fa-spinner fa-spin"></i> Loading sales...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/common.js"></script>
     <script>
-        let cart = [];
-        let products = [];
+      let cart = [];
+      let products = [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadProducts();
-            // Don't load sales history initially to avoid errors
-            // loadSalesHistory();
+      document.addEventListener("DOMContentLoaded", function () {
+        loadProducts();
+        loadSalesHistory(); // Enable sales history loading
+      });
+
+      async function loadProducts() {
+        try {
+          const response = await fetch("/api/products");
+          if (!response.ok) {
+            throw new Error("Failed to load products");
+          }
+
+          products = await response.json();
+          populateProductSelect();
+        } catch (error) {
+          console.error("Error loading products:", error);
+          showError("Failed to load products");
+        }
+      }
+
+      function populateProductSelect() {
+        const select = document.getElementById("productSelect");
+        select.innerHTML = '<option value="">Choose a product...</option>';
+
+        products.forEach((product) => {
+          const option = document.createElement("option");
+          option.value = product.productId;
+
+          if (product.currentStock > 0) {
+            option.textContent = `${product.productName} - ₹${product.sellingPrice} (Stock: ${product.currentStock})`;
+          } else {
+            option.textContent = `${product.productName} - ₹${product.sellingPrice} (OUT OF STOCK)`;
+            option.disabled = true;
+            option.style.color = "#dc3545";
+          }
+
+          select.appendChild(option);
         });
+      }
 
-        async function loadProducts() {
-            try {
-                const response = await fetch('/api/products');
-                if (!response.ok) {
-                    throw new Error('Failed to load products');
-                }
-                
-                products = await response.json();
-                populateProductSelect();
-            } catch (error) {
-                console.error('Error loading products:', error);
-                showError('Failed to load products');
-            }
+      function addToCart() {
+        const productId = document.getElementById("productSelect").value;
+        const quantityValue = document.getElementById("quantity").value;
+        const quantity = parseInt(quantityValue);
+
+        if (!productId || quantity <= 0 || isNaN(quantity)) {
+          showError("Please select a product and enter valid quantity");
+          return;
         }
 
-        function populateProductSelect() {
-            const select = document.getElementById('productSelect');
-            select.innerHTML = '<option value="">Choose a product...</option>';
-            
-            products.forEach(product => {
-                const option = document.createElement('option');
-                option.value = product.productId;
-                
-                if (product.currentStock > 0) {
-                    option.textContent = `${product.productName} - ₹${product.sellingPrice} (Stock: ${product.currentStock})`;
-                } else {
-                    option.textContent = `${product.productName} - ₹${product.sellingPrice} (OUT OF STOCK)`;
-                    option.disabled = true;
-                    option.style.color = '#dc3545';
-                }
-                
-                select.appendChild(option);
-            });
+        const product = products.find((p) => p.productId == productId);
+        if (!product) {
+          showError("Product not found");
+          return;
         }
 
-        function addToCart() {
-            const productId = document.getElementById('productSelect').value;
-            const quantityValue = document.getElementById('quantity').value;
-            const quantity = parseInt(quantityValue);
-            
-            if (!productId || quantity <= 0 || isNaN(quantity)) {
-                showError('Please select a product and enter valid quantity');
-                return;
-            }
-            
-            const product = products.find(p => p.productId == productId);
-            if (!product) {
-                showError('Product not found');
-                return;
-            }
-            
-            if (quantity > product.currentStock) {
-                showError(`Only ${product.currentStock} items available in stock`);
-                return;
-            }
-            
-            // Check if product already in cart
-            const existingItem = cart.find(item => item.productId == parseInt(productId));
-            if (existingItem) {
-                if (existingItem.quantity + quantity > product.currentStock) {
-                    showError(`Cannot add more items. Total would exceed stock (${product.currentStock})`);
-                    return;
-                }
-                existingItem.quantity += quantity;
-            } else {
-                const newItem = {
-                    productId: parseInt(product.productId),
-                    productName: product.productName,
-                    price: product.sellingPrice,
-                    quantity: quantity
-                };
-                cart.push(newItem);
-            }
-            
-            updateCartDisplay();
-            updateSummary();
-            
-            // Reset form
-            document.getElementById('productSelect').value = '';
-            document.getElementById('quantity').value = 1;
+        if (quantity > product.currentStock) {
+          showError(`Only ${product.currentStock} items available in stock`);
+          return;
         }
 
-        function updateCartDisplay() {
-            const tbody = document.getElementById('cartItems');
-            
-            if (cart.length === 0) {
-                tbody.innerHTML = `
+        // Check if product already in cart
+        const existingItem = cart.find(
+          (item) => item.productId == parseInt(productId)
+        );
+        if (existingItem) {
+          if (existingItem.quantity + quantity > product.currentStock) {
+            showError(
+              `Cannot add more items. Total would exceed stock (${product.currentStock})`
+            );
+            return;
+          }
+          existingItem.quantity += quantity;
+        } else {
+          const newItem = {
+            productId: parseInt(product.productId),
+            productName: product.productName,
+            price: product.sellingPrice,
+            quantity: quantity,
+          };
+          cart.push(newItem);
+        }
+
+        updateCartDisplay();
+        updateSummary();
+
+        // Reset form
+        document.getElementById("productSelect").value = "";
+        document.getElementById("quantity").value = 1;
+      }
+
+      function updateCartDisplay() {
+        const tbody = document.getElementById("cartItems");
+
+        if (cart.length === 0) {
+          tbody.innerHTML = `
                     <tr>
                         <td colspan="5" class="text-center text-muted">
                             <i class="fas fa-shopping-cart fa-2x mb-2"></i>
@@ -327,12 +373,12 @@
                         </td>
                     </tr>
                 `;
-                return;
-            }
-            
-            tbody.innerHTML = '';
-            cart.forEach((item, index) => {
-                const row = `
+          return;
+        }
+
+        tbody.innerHTML = "";
+        cart.forEach((item, index) => {
+          const row = `
                     <tr>
                         <td>${item.productName}</td>
                         <td>₹${item.price.toFixed(2)}</td>
@@ -349,164 +395,187 @@
                         </td>
                     </tr>
                 `;
-                tbody.insertAdjacentHTML('beforeend', row);
-            });
+          tbody.insertAdjacentHTML("beforeend", row);
+        });
+      }
+
+      function updateQuantity(index, newQuantity) {
+        newQuantity = parseInt(newQuantity);
+        if (newQuantity <= 0) {
+          removeFromCart(index);
+          return;
         }
 
-        function updateQuantity(index, newQuantity) {
-            newQuantity = parseInt(newQuantity);
-            if (newQuantity <= 0) {
-                removeFromCart(index);
-                return;
-            }
-            
-            const item = cart[index];
-            const product = products.find(p => p.productId == item.productId);
-            
-            if (newQuantity > product.currentStock) {
-                showError(`Only ${product.currentStock} items available in stock`);
-                updateCartDisplay();
-                return;
-            }
-            
-            cart[index].quantity = newQuantity;
-            updateCartDisplay();
-            updateSummary();
+        const item = cart[index];
+        const product = products.find((p) => p.productId == item.productId);
+
+        if (newQuantity > product.currentStock) {
+          showError(`Only ${product.currentStock} items available in stock`);
+          updateCartDisplay();
+          return;
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartDisplay();
-            updateSummary();
+        cart[index].quantity = newQuantity;
+        updateCartDisplay();
+        updateSummary();
+      }
+
+      function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartDisplay();
+        updateSummary();
+      }
+
+      function clearCart() {
+        cart = [];
+        updateCartDisplay();
+        updateSummary();
+      }
+
+      function updateSummary() {
+        const subtotal = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const tax = subtotal * 0.18;
+        const total = subtotal + tax;
+
+        document.getElementById("subtotal").textContent = `₹${subtotal.toFixed(
+          2
+        )}`;
+        document.getElementById("tax").textContent = `₹${tax.toFixed(2)}`;
+        document.getElementById("total").textContent = `₹${total.toFixed(2)}`;
+
+        // Enable/disable complete sale button
+        document.getElementById("completeSaleBtn").disabled = cart.length === 0;
+      }
+
+      async function completeSale() {
+        if (cart.length === 0) {
+          showError("Cart is empty");
+          return;
         }
 
-        function clearCart() {
-            cart = [];
-            updateCartDisplay();
-            updateSummary();
+        const customerName = document
+          .getElementById("customerName")
+          .value.trim();
+        const paymentMethod = document.getElementById("paymentMethod").value;
+
+        if (!customerName) {
+          showError("Please enter customer name");
+          return;
         }
 
-        function updateSummary() {
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.18;
-            const total = subtotal + tax;
-            
-            document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
-            document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
-            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
-            
-            // Enable/disable complete sale button
-            document.getElementById('completeSaleBtn').disabled = cart.length === 0;
+        const saleData = {
+          customerName: customerName,
+          paymentMethod: paymentMethod,
+          items: cart,
+          subtotal: cart.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          ),
+          tax:
+            cart.reduce((sum, item) => sum + item.price * item.quantity, 0) *
+            0.18,
+          total:
+            cart.reduce((sum, item) => sum + item.price * item.quantity, 0) *
+            1.18,
+        };
+
+        try {
+          const response = await fetch("/api/sales", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(saleData),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showSuccess("Sale completed successfully!");
+            clearCart();
+            document.getElementById("customerName").value = "";
+            loadSalesHistory();
+          } else {
+            showError(result.message || "Failed to complete sale");
+          }
+        } catch (error) {
+          console.error("Error completing sale:", error);
+          showError("Failed to complete sale");
+        }
+      }
+
+      async function loadSalesHistory() {
+        try {
+          const response = await fetch("/api/sales");
+          if (!response.ok) {
+            throw new Error("Failed to load sales");
+          }
+
+          const sales = await response.json();
+          displaySalesHistory(sales);
+        } catch (error) {
+          console.error("Error loading sales:", error);
+          document.getElementById("salesHistory").innerHTML =
+            '<tr><td colspan="7" class="text-center text-danger">Error loading sales</td></tr>';
+        }
+      }
+
+      function displaySalesHistory(sales) {
+        const tbody = document.getElementById("salesHistory");
+
+        if (sales.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="7" class="text-center">No sales found</td></tr>';
+          return;
         }
 
-        async function completeSale() {
-            if (cart.length === 0) {
-                showError('Cart is empty');
-                return;
-            }
-            
-            const customerName = document.getElementById('customerName').value.trim();
-            const paymentMethod = document.getElementById('paymentMethod').value;
-            
-            if (!customerName) {
-                showError('Please enter customer name');
-                return;
-            }
-            
-            const saleData = {
-                customerName: customerName,
-                paymentMethod: paymentMethod,
-                items: cart,
-                subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                tax: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.18,
-                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.18
-            };
-            
-            try {
-                const response = await fetch('/api/sales', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(saleData)
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showSuccess('Sale completed successfully!');
-                    clearCart();
-                    document.getElementById('customerName').value = '';
-                    loadSalesHistory();
-                } else {
-                    showError(result.message || 'Failed to complete sale');
-                }
-            } catch (error) {
-                console.error('Error completing sale:', error);
-                showError('Failed to complete sale');
-            }
-        }
+        tbody.innerHTML = "";
+        sales.slice(0, 10).forEach((sale) => {
+          const saleDate = new Date(sale.saleDate).toLocaleDateString();
+          const paymentBadge = getPaymentBadge(sale.paymentMethod);
 
-        async function loadSalesHistory() {
-            try {
-                const response = await fetch('/api/sales');
-                if (!response.ok) {
-                    throw new Error('Failed to load sales');
-                }
-                
-                const sales = await response.json();
-                displaySalesHistory(sales);
-            } catch (error) {
-                console.error('Error loading sales:', error);
-                document.getElementById('salesHistory').innerHTML = 
-                    '<tr><td colspan="7" class="text-center text-danger">Error loading sales</td></tr>';
-            }
-        }
-
-        function displaySalesHistory(sales) {
-            const tbody = document.getElementById('salesHistory');
-            
-            if (sales.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No sales found</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = '';
-            sales.slice(0, 10).forEach(sale => {
-                const saleDate = new Date(sale.saleDate).toLocaleDateString();
-                const paymentBadge = getPaymentBadge(sale.paymentMethod);
-                
-                const row = `
+          const row = `
                     <tr>
                         <td>#${sale.saleId}</td>
                         <td>${saleDate}</td>
-                        <td>${sale.customerName || 'Walk-in Customer'}</td>
-                        <td><span class="badge bg-info">${sale.itemCount || 'N/A'}</span></td>
+                        <td>${sale.customerName || "Walk-in Customer"}</td>
+                        <td><span class="badge bg-info">${
+                          sale.itemCount || "N/A"
+                        }</span></td>
                         <td>₹${sale.totalAmount.toFixed(2)}</td>
                         <td>${paymentBadge}</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary" onclick="viewSaleDetails(${sale.saleId})">
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewSaleDetails(${
+                              sale.saleId
+                            })">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </td>
                     </tr>
                 `;
-                tbody.insertAdjacentHTML('beforeend', row);
-            });
-        }
+          tbody.insertAdjacentHTML("beforeend", row);
+        });
+      }
 
-        function getPaymentBadge(method) {
-            const badges = {
-                'cash': '<span class="badge bg-success">Cash</span>',
-                'card': '<span class="badge bg-primary">Card</span>',
-                'upi': '<span class="badge bg-warning">UPI</span>'
-            };
-            return badges[method] || '<span class="badge bg-secondary">Unknown</span>';
-        }
+      function getPaymentBadge(method) {
+        const badges = {
+          cash: '<span class="badge bg-success">Cash</span>',
+          card: '<span class="badge bg-primary">Card</span>',
+          upi: '<span class="badge bg-warning">UPI</span>',
+        };
+        return (
+          badges[method] || '<span class="badge bg-secondary">Unknown</span>'
+        );
+      }
 
-        function viewSaleDetails(saleId) {
-            showInfo(`View sale details for Sale #${saleId} - Feature to be implemented`);
-        }
+      function viewSaleDetails(saleId) {
+        showInfo(
+          `View sale details for Sale #${saleId} - Feature to be implemented`
+        );
+      }
     </script>
-</body>
+  </body>
 </html>

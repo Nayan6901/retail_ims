@@ -16,6 +16,9 @@ C:\Users\Nayan\retail_ims\src\com\retail\ims\model\SaleItem.java
 C:\Users\Nayan\retail_ims\src\com\retail\ims\model\Supplier.java
 C:\Users\Nayan\retail_ims\src\com\retail\ims\model\User.java
 C:\Users\Nayan\retail_ims\src\com\retail\ims\service\DashboardService.java
+C:\Users\Nayan\retail_ims\src\com\retail\ims\test\AddStockTest.java
 C:\Users\Nayan\retail_ims\src\com\retail\ims\test\DatabaseTest.java
+C:\Users\Nayan\retail_ims\src\com\retail\ims\test\ProductTest.java
+C:\Users\Nayan\retail_ims\src\com\retail\ims\test\SaleApiTest.java
 C:\Users\Nayan\retail_ims\src\com\retail\ims\util\EnvLoader.java
 C:\Users\Nayan\retail_ims\src\com\retail\ims\util\JsonUtil.java

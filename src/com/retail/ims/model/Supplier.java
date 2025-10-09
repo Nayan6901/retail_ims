@@ -18,6 +18,7 @@ public class Supplier {
     private boolean isActive;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private int productCount; // Number of products from this supplier
     
     // Constructors
     public Supplier() {}
@@ -130,6 +131,14 @@ public class Supplier {
     
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    public int getProductCount() {
+        return productCount;
+    }
+    
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
     }
     
     @Override
