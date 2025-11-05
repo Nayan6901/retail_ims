@@ -3,6 +3,9 @@
 
 USE inventory_db;
 
+-- Disable safe update mode temporarily
+SET SQL_SAFE_UPDATES = 0;
+
 -- Clear existing data (be careful - this will remove all existing data)
 DELETE FROM purchase_items;
 DELETE FROM sale_items;
@@ -11,6 +14,9 @@ DELETE FROM purchases;
 DELETE FROM stock;
 DELETE FROM products;
 DELETE FROM suppliers;
+
+-- Re-enable safe update mode
+SET SQL_SAFE_UPDATES = 1;
 
 -- Reset auto increment counters
 ALTER TABLE suppliers AUTO_INCREMENT = 1;
@@ -25,6 +31,17 @@ INSERT INTO suppliers (supplier_name, contact_person, phone, email, address, cit
 ('HealthFirst Wellness', 'Dr. Priya Sharma', '9876543212', 'priya@healthfirst.com', '78 Wellness Plaza', 'Bangalore', 'Karnataka', '560001'),
 ('HomeEssentials Pro', 'Rahul Gupta', '9876543213', 'rahul@homeessentials.com', '23 Home Center Mall', 'Delhi', 'Delhi', '110001'),
 ('GourmetChoice Foods', 'Neha Patel', '9876543214', 'neha@gourmetchoice.com', '56 Food Hub Complex', 'Pune', 'Maharashtra', '411001');
+
+-- Ensure we have the necessary categories (insert only if they don't exist)
+INSERT IGNORE INTO categories (category_id, category_name, description) VALUES
+(1, 'Electronics', 'Electronic items and gadgets'),
+(2, 'Groceries', 'Food and grocery items'),
+(3, 'Beverages', 'Drinks and beverages'),
+(4, 'Personal Care', 'Personal care and hygiene products'),
+(5, 'Household', 'Household items and cleaning supplies'),
+(6, 'Snacks', 'Snacks and confectionery'),
+(7, 'Dairy', 'Dairy products'),
+(8, 'Stationery', 'Office and school supplies');
 
 -- Insert ChromaStore Products (25 Modern Retail Items)
 INSERT INTO products (product_code, product_name, description, category_id, supplier_id, unit, cost_price, selling_price, min_stock_level, max_stock_level) VALUES
@@ -63,42 +80,42 @@ INSERT INTO products (product_code, product_name, description, category_id, supp
 ('CHR024', 'Himalayan Pink Salt 500g', 'Natural rock salt crystals', 2, 5, 'Pack', 80.00, 149.00, 50, 500),
 ('CHR025', 'Organic Honey 500g', 'Pure raw unprocessed honey', 2, 5, 'Jar', 300.00, 499.00, 35, 350);
 
--- Initialize stock for all products with varied quantities
+-- Initialize stock for all products with varied quantities using product codes
 INSERT INTO stock (product_id, quantity) VALUES
 -- Electronics (Low stock for some items to test low stock alerts)
-(1, 12),  -- CHR001 - Below min level (15)
-(2, 8),   -- CHR002 - Below min level (10)
-(3, 45),  -- CHR003 - Normal
-(4, 80),  -- CHR004 - Normal
-(5, 120), -- CHR005 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR001'), 12),  -- CHR001 - Below min level (15)
+((SELECT product_id FROM products WHERE product_code = 'CHR002'), 8),   -- CHR002 - Below min level (10)
+((SELECT product_id FROM products WHERE product_code = 'CHR003'), 45),  -- CHR003 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR004'), 80),  -- CHR004 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR005'), 120), -- CHR005 - Normal
 
 -- Fashion & Accessories
-(6, 65),  -- CHR006 - Normal
-(7, 35),  -- CHR007 - Normal
-(8, 180), -- CHR008 - Normal
-(9, 95),  -- CHR009 - Normal
-(10, 25), -- CHR010 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR006'), 65),  -- CHR006 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR007'), 35),  -- CHR007 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR008'), 180), -- CHR008 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR009'), 95),  -- CHR009 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR010'), 25),  -- CHR010 - Normal
 
 -- Health & Wellness (Some low stock items)
-(11, 25), -- CHR011 - Below min level (50)
-(12, 8),  -- CHR012 - Below min level (15)
-(13, 65), -- CHR013 - Normal
-(14, 450), -- CHR014 - Normal
-(15, 320), -- CHR015 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR011'), 25),  -- CHR011 - Below min level (50)
+((SELECT product_id FROM products WHERE product_code = 'CHR012'), 8),   -- CHR012 - Below min level (15)
+((SELECT product_id FROM products WHERE product_code = 'CHR013'), 65),  -- CHR013 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR014'), 450), -- CHR014 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR015'), 320), -- CHR015 - Normal
 
 -- Home Essentials
-(16, 180), -- CHR016 - Normal
-(17, 45),  -- CHR017 - Normal
-(18, 85),  -- CHR018 - Normal
-(19, 75),  -- CHR019 - Normal
-(20, 55),  -- CHR020 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR016'), 180), -- CHR016 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR017'), 45),  -- CHR017 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR018'), 85),  -- CHR018 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR019'), 75),  -- CHR019 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR020'), 55),  -- CHR020 - Normal
 
 -- Gourmet Foods (Some low stock)
-(21, 25), -- CHR021 - Below min level (40)
-(22, 220), -- CHR022 - Normal
-(23, 15), -- CHR023 - Below min level (30)
-(24, 180), -- CHR024 - Normal
-(25, 120); -- CHR025 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR021'), 25),  -- CHR021 - Below min level (40)
+((SELECT product_id FROM products WHERE product_code = 'CHR022'), 220), -- CHR022 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR023'), 15),  -- CHR023 - Below min level (30)
+((SELECT product_id FROM products WHERE product_code = 'CHR024'), 180), -- CHR024 - Normal
+((SELECT product_id FROM products WHERE product_code = 'CHR025'), 120); -- CHR025 - Normal
 
 -- Add ChromaStore sample purchases
 INSERT INTO purchases (purchase_number, supplier_id, purchase_date, payment_status, created_by, notes) VALUES
@@ -108,42 +125,42 @@ INSERT INTO purchases (purchase_number, supplier_id, purchase_date, payment_stat
 ('CHR-PUR-004', 4, '2025-10-03', 'pending', 1, 'Stock replenishment - HomeEssentials Pro'),
 ('CHR-PUR-005', 5, '2025-10-05', 'paid', 1, 'Monthly purchase - GourmetChoice Foods');
 
--- Add purchase items
+-- Add purchase items using product codes
 INSERT INTO purchase_items (purchase_id, product_id, quantity, unit_price, total_price) VALUES
 -- Purchase 1 - TechVision Electronics
-(1, 1, 50, 2500.00, 125000.00),
-(1, 2, 30, 4500.00, 135000.00),
-(1, 3, 75, 1800.00, 135000.00),
-(1, 4, 100, 800.00, 80000.00),
-(1, 5, 150, 600.00, 90000.00),
+(1, (SELECT product_id FROM products WHERE product_code = 'CHR001'), 50, 2500.00, 125000.00),
+(1, (SELECT product_id FROM products WHERE product_code = 'CHR002'), 30, 4500.00, 135000.00),
+(1, (SELECT product_id FROM products WHERE product_code = 'CHR003'), 75, 1800.00, 135000.00),
+(1, (SELECT product_id FROM products WHERE product_code = 'CHR004'), 100, 800.00, 80000.00),
+(1, (SELECT product_id FROM products WHERE product_code = 'CHR005'), 150, 600.00, 90000.00),
 
 -- Purchase 2 - UrbanStyle Fashion Hub
-(2, 6, 80, 800.00, 64000.00),
-(2, 7, 50, 1200.00, 60000.00),
-(2, 8, 200, 300.00, 60000.00),
-(2, 9, 120, 200.00, 24000.00),
-(2, 10, 40, 1500.00, 60000.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR006'), 80, 800.00, 64000.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR007'), 50, 1200.00, 60000.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR008'), 200, 300.00, 60000.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR009'), 120, 200.00, 24000.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR010'), 40, 1500.00, 60000.00),
 
 -- Purchase 3 - HealthFirst Wellness
-(3, 11, 200, 120.00, 24000.00),
-(3, 12, 50, 1800.00, 90000.00),
-(3, 13, 80, 800.00, 64000.00),
-(3, 14, 500, 150.00, 75000.00),
-(3, 15, 400, 80.00, 32000.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR011'), 200, 120.00, 24000.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR012'), 50, 1800.00, 90000.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR013'), 80, 800.00, 64000.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR014'), 500, 150.00, 75000.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR015'), 400, 80.00, 32000.00),
 
 -- Purchase 4 - HomeEssentials Pro
-(4, 16, 250, 80.00, 20000.00),
-(4, 17, 60, 1200.00, 72000.00),
-(4, 18, 100, 600.00, 60000.00),
-(4, 19, 100, 800.00, 80000.00),
-(4, 20, 75, 1000.00, 75000.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR016'), 250, 80.00, 20000.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR017'), 60, 1200.00, 72000.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR018'), 100, 600.00, 60000.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR019'), 100, 800.00, 80000.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR020'), 75, 1000.00, 75000.00),
 
 -- Purchase 5 - GourmetChoice Foods
-(5, 21, 150, 180.00, 27000.00),
-(5, 22, 300, 120.00, 36000.00),
-(5, 23, 100, 400.00, 40000.00),
-(5, 24, 250, 80.00, 20000.00),
-(5, 25, 200, 300.00, 60000.00);
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR021'), 150, 180.00, 27000.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR022'), 300, 120.00, 36000.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR023'), 100, 400.00, 40000.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR024'), 250, 80.00, 20000.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR025'), 200, 300.00, 60000.00);
 
 -- Add some sample sales for ChromaStore
 INSERT INTO sales (sale_number, sale_date, customer_name, customer_phone, discount, tax, payment_method, payment_status, created_by) VALUES
@@ -153,29 +170,29 @@ INSERT INTO sales (sale_number, sale_date, customer_name, customer_phone, discou
 ('CHR-SALE-004', '2025-10-06 09:15:00', 'Rohit Kumar', '9876543304', 100.00, 359.28, 'upi', 'paid', 2),
 ('CHR-SALE-005', '2025-10-06 16:30:00', 'Priya Reddy', '9876543305', 0, 539.82, 'card', 'paid', 3);
 
--- Add sale items
+-- Add sale items using product codes
 INSERT INTO sale_items (sale_id, product_id, quantity, unit_price, total_price) VALUES
 -- Sale 1 - Electronics purchase
-(1, 1, 1, 3999.00, 3999.00),
+(1, (SELECT product_id FROM products WHERE product_code = 'CHR001'), 1, 3999.00, 3999.00),
 
 -- Sale 2 - Fashion items
-(2, 6, 1, 1499.00, 1499.00),
-(2, 8, 2, 599.00, 1198.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR006'), 1, 1499.00, 1499.00),
+(2, (SELECT product_id FROM products WHERE product_code = 'CHR008'), 2, 599.00, 1198.00),
 
 -- Sale 3 - Health products
-(3, 11, 2, 199.00, 398.00),
-(3, 15, 1, 149.00, 149.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR011'), 2, 199.00, 398.00),
+(3, (SELECT product_id FROM products WHERE product_code = 'CHR015'), 1, 149.00, 149.00),
 
 -- Sale 4 - Home essentials
-(4, 16, 3, 149.00, 447.00),
-(4, 18, 1, 999.00, 999.00),
-(4, 20, 1, 1699.00, 1699.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR016'), 3, 149.00, 447.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR018'), 1, 999.00, 999.00),
+(4, (SELECT product_id FROM products WHERE product_code = 'CHR020'), 1, 1699.00, 1699.00),
 
 -- Sale 5 - Gourmet foods
-(5, 21, 2, 299.00, 598.00),
-(5, 22, 5, 199.00, 995.00),
-(5, 23, 1, 649.00, 649.00),
-(5, 25, 2, 499.00, 998.00);
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR021'), 2, 299.00, 598.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR022'), 5, 199.00, 995.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR023'), 1, 649.00, 649.00),
+(5, (SELECT product_id FROM products WHERE product_code = 'CHR025'), 2, 499.00, 998.00);
 
 -- Update sale totals
 UPDATE sales SET 
