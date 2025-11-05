@@ -22,31 +22,50 @@ class  factorial {
 ## 2. Display First 50 Prime Numbers
 
 ```java
-class First50Primes {
-    public static void main(String[] args) {
-        int count=0, num=2;
+class  first50primes{
+    public static void main(String[] args){
+        int count = 0,num = 2;
         while(count<50){
-            boolean prime=true;
-            for(int i=2;i*i<=num;i++)
-                if(num%i==0){prime=false;break;}
-            if(prime){System.out.print(num+" ");count++;}
-            num++;
-        }
-    }
+            boolean prime = true;
+            for(int i=2; i<=num/2; i++){
+                if(num % i ==0){
+                    prime = false;
+                    break;
+                }
+            }
+            if(prime){
+                System.out.println(num+" ");
+                count++;
+            }
+                num++;
+        }
+    }
 }
 ```
 
 ## 3. Find Sum and Average of N Numbers
 
 ```java
-import java.util.*;
-class SumAvg {
+import  java .util.Scanner;
+class sumavg{
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n=sc.nextInt(), sum=0;
-        for(int i=0;i<n;i++) sum+=sc.nextInt();
-        System.out.println("Sum="+sum+" Avg="+(sum/(float)n));
-    }
+
+        int n;
+        double sum = 0, average;
+
+        System.out.println("enter how many noo");
+        n = sc.nextInt();
+
+        for (int i = 1; i<=n; i++){
+            System.out.println("enetr no:"+i);
+            double num = sc.nextDouble();
+            sum = sum+num;
+        }
+        average = sum/n;
+        System.out.println("sum"+sum);
+        System.out.println("avg"+average);
+    }
 }
 ```
 
@@ -54,19 +73,53 @@ class SumAvg {
 
 ```java
 import java.util.*;
+
 class Calculator {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        double a=sc.nextDouble(), b=sc.nextDouble();
-        char op=sc.next().charAt(0);
-        double r = switch(op){
-            case '+': yield a+b;
-            case '-': yield a-b;
-            case '*': yield a*b;
-            case '/': yield b!=0?a/b:Double.NaN;
-            default: yield 0;
-        };
-        System.out.println("Result: "+r);
+
+        // Input two numbers
+        System.out.print("Enter first number: ");
+        double num1 = sc.nextDouble();
+
+        System.out.print("Enter second number: ");
+        double num2 = sc.nextDouble();
+
+        // Choose operation
+        System.out.println("Choose an operation (+, -, *, /): ");
+        char operator = sc.next().charAt(0);
+
+        double result = 0;
+
+        // Switch case for operation
+        switch(operator) {
+            case '+':
+                result = num1 + num2;
+                break;
+
+            case '-':
+                result = num1 - num2;
+                break;
+
+            case '*':
+                result = num1 * num2;
+                break;
+
+            case '/':
+                if(num2 != 0)
+                    result = num1 / num2;
+                else {
+                    System.out.println("Error! Division by zero.");
+                    return;
+                }
+                break;
+
+            default:
+                System.out.println("Invalid operator!");
+                return;
+        }
+
+        System.out.println("Result: " + result);
     }
 }
 ```
