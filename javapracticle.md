@@ -4,13 +4,18 @@
 
 ```java
 import java.util.*;
-class Factorial {
-    public static void main(String[] args) {
+class  factorial {
+    public static void main (String[] args){
+
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt(), fact = 1;
-        for(int i=1;i<=n;i++) fact*=i;
-        System.out.println("Factorial: "+fact);
-    }
+        int n = sc.nextInt();
+        long factorial = 1;
+        for(int i =1; i<=n; i++){
+            factorial = factorial*i;
+
+        }
+        System.out.println("factorial oa :" +n +"is :"+factorial);
+    }
 }
 ```
 
